@@ -12,7 +12,7 @@ type Client struct {
 }
 
 var subCommands = []cli.Command {
-    Jobs,
+    Jobs, Status,
 }
 
 
@@ -22,6 +22,14 @@ func NewClient(hostname string) *Client {
 
 func (c *Client) get(path string) (*http.Response, error) {
     req, err := http.NewRequest("GET", c.baseUrl + path, nil)
+    if err != nil {
+        return nil, err
+    }
+    return c.Do(req)
+}
+
+func (c *Client) head() (*http.Response, error) {
+    req, err := http.NewRequest("HEAD", c.baseUrl, nil)
     if err != nil {
         return nil, err
     }
