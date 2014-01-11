@@ -3,5 +3,9 @@ go:
     - 1.1
     - 1.2
 
+install:
+    - go get -v github.com/codegangsta/cli
+    - go get -v github.com/hhatto/nanairo
+
 script:
     - go test -v ./
