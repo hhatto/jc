@@ -41,10 +41,11 @@ func getJobs(url string) ([]Job, error) {
 
 func jobs(c *cli.Context) {
     url := Config.Get(c.String("name"))
+    fmt.Println(c.String("name"), "-", url)
     jobs, _ := getJobs(url)
     for _, job := range jobs {
         // S
-        var j = bytes.NewBufferString("")
+        var j = bytes.NewBufferString(" ")
         if job.Color == "blue" {
             j.WriteString(nanairo.FgColor("#0c0", "✔"))
         } else if job.Color == "blue_anime" {

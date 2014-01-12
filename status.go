@@ -18,7 +18,9 @@ func printServerInfo(url string) {
 }
 
 func status(c *cli.Context) {
-    printServerInfo(Config.Get(c.String("name")))
+    url := Config.Get(c.String("name"))
+    fmt.Println(c.String("name"), "-", url)
+    printServerInfo(url)
 }
 
 var Status = cli.Command {
