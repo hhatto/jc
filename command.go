@@ -12,12 +12,12 @@ type Client struct {
 }
 
 var subCommands = []cli.Command {
-    Jobs, Status,
+    Jobs, Status, Conf,
 }
 
 
-func NewClient(hostname string) *Client {
-    return &Client{"http://" + hostname + "/", http.DefaultClient}
+func NewClient(url string) *Client {
+    return &Client{url + "/", http.DefaultClient}
 }
 
 func (c *Client) get(path string) (*http.Response, error) {

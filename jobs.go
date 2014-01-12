@@ -20,8 +20,8 @@ type Job struct {
     HealthReport []healthReport `json:"healthReport"`
 }
 
-func getJobs(hostname string) ([]Job, error) {
-    client := NewClient(hostname)
+func getJobs(url string) ([]Job, error) {
+    client := NewClient(url)
     res, err := client.get("api/json?depth=1")
     if err != nil {
         return nil, err
@@ -40,12 +40,8 @@ func getJobs(hostname string) ([]Job, error) {
 }
 
 func jobs(c *cli.Context) {
-    if len(c.Args()) == 0 {
-        fmt.Println("set target hostname")
-        return
-    }
-
-    jobs, _ := getJobs(c.Args()[0])
+    url := Config.Get(c.String("name"))
+    jobs, _ := getJobs(url)
     for _, job := range jobs {
         // S
         var j = bytes.NewBufferString("")
@@ -78,4 +74,9 @@ var Jobs = cli.Command {
     Name: "jobs",
     Usage: "print status for all jobs",
     Action: jobs,
+    Flags: []cli.Flag {
+        cli.StringFlag {
+            "name, n", "default",
+            "host key name(default is 'default')",},
+    },
 }

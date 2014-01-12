@@ -6,8 +6,8 @@ import (
 )
 
 
-func printServerInfo(hostname string) {
-    client := NewClient(hostname)
+func printServerInfo(url string) {
+    client := NewClient(url)
     res, err := client.head()
     if err != nil {
         fmt.Println("HEAD request error")
@@ -18,16 +18,16 @@ func printServerInfo(hostname string) {
 }
 
 func status(c *cli.Context) {
-    if len(c.Args()) == 0 {
-        fmt.Println("set target hostname")
-        return
-    }
-
-    printServerInfo(c.Args()[0])
+    printServerInfo(Config.Get(c.String("name")))
 }
 
 var Status = cli.Command {
     Name: "status",
     Usage: "print jenkins host status",
     Action: status,
+    Flags: []cli.Flag {
+        cli.StringFlag {
+            "name, n", "default",
+            "host key name(default is 'default')",},
+    },
 }
