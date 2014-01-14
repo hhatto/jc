@@ -20,13 +20,20 @@ type Job struct {
     HealthReport []healthReport `json:"healthReport"`
 }
 
-func getJobs(url string) ([]Job, error) {
+func getJobs(url string, dumpFlag bool) ([]Job, error) {
     client := NewClient(url)
     res, err := client.get("api/json?depth=1")
     if err != nil {
         return nil, err
     }
     defer res.Body.Close()
+
+    if dumpFlag == true {
+        buf := new(bytes.Buffer)
+        buf.ReadFrom(res.Body)
+        fmt.Println(buf.String())
+        return nil, nil
+    }
 
     var r struct {
         Jobs []Job `json:"jobs"`
@@ -41,8 +48,11 @@ func getJobs(url string) ([]Job, error) {
 
 func jobs(c *cli.Context) {
     url := Config.Get(c.String("name"))
+    jobs, _ := getJobs(url, c.Bool("dump"))
+    if c.Bool("dump") == true {
+        return
+    }
     fmt.Println(c.String("name"), "-", url)
-    jobs, _ := getJobs(url)
     for _, job := range jobs {
         // S
         var j = bytes.NewBufferString(" ")
@@ -79,5 +89,8 @@ var Jobs = cli.Command {
         cli.StringFlag {
             "name, n", "default",
             "host key name(default is 'default')",},
+        cli.BoolFlag {
+            "dump, d",
+            "dump raw json data",},
     },
 }
