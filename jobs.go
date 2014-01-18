@@ -55,7 +55,7 @@ func jobs(c *cli.Context) {
     fmt.Println(c.String("name"), "-", url)
     for _, job := range jobs {
         // S
-        var j = bytes.NewBufferString(" ")
+        var j = bytes.NewBufferString("  ")
         if job.Color == "blue" {
             j.WriteString(nanairo.FgColor("#0c0", "✔"))
         } else if job.Color == "blue_anime" {
@@ -75,7 +75,7 @@ func jobs(c *cli.Context) {
         }
 
         // Name
-        j.WriteString("  " + job.Name)
+        j.WriteString(fmt.Sprintf("  %s", job.Name))
 
         fmt.Println(j.String())
     }
