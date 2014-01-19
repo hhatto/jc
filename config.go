@@ -46,7 +46,14 @@ func (conf *JcConfig) Load(filename string) error {
     return nil
 }
 
-func (conf *JcConfig) Dump(filename string) error {
+func (conf *JcConfig) Dump(filename string, format string) error {
+    if format == "list" {
+        for _, e := range conf.HostInfo {
+            fmt.Println(fmt.Sprintf("%s,%s", e.Name, e.Hostname))
+        }
+        return nil
+    }
+
     enc, err := json.MarshalIndent(conf, "", "  ")
     if err != nil {
         return err

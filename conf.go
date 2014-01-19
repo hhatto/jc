@@ -7,19 +7,25 @@ import (
 
 
 func conf(c *cli.Context) {
-    if c.Bool("dump") {
-        Config.Dump(defaultConfigFile)
+    if c.String("dump") != "" {
+        Config.Dump(defaultConfigFile, c.String("dump"))
         return
     }
 
-    if len(c.Args()) == 0 {
+    if len(c.Args()) == 0 && c.Bool("rm") {
         fmt.Println("assign target url")
         return
     }
 
     for i, _ := range Config.HostInfo {
         if Config.HostInfo[i].Name == c.String("name") {
-            Config.HostInfo[i] = JcConfigHostInfo{Name: c.String("name"), Hostname: c.Args().First()}
+            if c.Bool("rm") == true {
+                // FIXME
+                Config.HostInfo = append(Config.HostInfo[:i+1], Config.HostInfo[i+1:]...)
+                fmt.Println(len(Config.HostInfo))
+            } else {
+                Config.HostInfo[i] = JcConfigHostInfo{Name: c.String("name"), Hostname: c.Args().First()}
+            }
             Config.Save(defaultConfigFile)
             return
         }
@@ -37,8 +43,11 @@ var Conf = cli.Command {
         cli.StringFlag {
             "name, n", "default",
             "host key name(default is 'default')",},
-        cli.BoolFlag {
-            "dump, d",
-            "print configuration",},
+        cli.StringFlag {
+            "rm", "",
+            "remove host key name",},
+        cli.StringFlag {
+            "dump, d", "",
+            "print configuration (all, list)",},
     },
 }
