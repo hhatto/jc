@@ -48,10 +48,9 @@ default - http://jenkins.hexacosa.net/
 ### print server status
 ```sh
 $ jc status -n mydomain
-jenkinsci - https://ci.jenkins-ci.org/
-version: 1.539-SNAPSHOT (rc-11/11/2013 15:37 GMT-kohsuke)
-server: Jetty(8.y.z-SNAPSHOT)
 ```
+
+![jc staus](https://dl.dropboxusercontent.com/u/26471561/img/jc_status.png)
 
 ## License
 MIT

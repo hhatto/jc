@@ -20,18 +20,24 @@ type Queue struct {
     BuildStartTime int  `json:"buildableStartMilliseconds"`
 }
 
+type ExecutorDetail struct {
+    DisplayName string  `json:"fullDisplayName"`
+}
 type Executor struct {
-    DisplayName string
-    Progress int        // xx/100
+    Detail ExecutorDetail   `json:"currentExecutable"`
+    Progress int            `json:"progress"`
 }
 type ComputerInfo struct {
-    TotalExecutors int      `json:"totalExecutors"`
-    BusyExecutors int       `json:"busyExecutors"`
     Executors []Executor    `json:"executors"`
 }
+type AllExecutor struct {
+    TotalExecutors int      `json:"totalExecutors"`
+    BusyExecutors int       `json:"busyExecutors"`
+    ComputerInfos []ComputerInfo    `json:"computer"`
+}
 
-func getExecutors(url string, dumpFlag bool) (ComputerInfo, error) {
-    var r ComputerInfo
+func getExecutors(url string, dumpFlag bool) (AllExecutor, error) {
+    var r AllExecutor
     client := NewClient(url)
     res, err := client.get("computer/api/json?depth=2")
     if err != nil {
@@ -87,23 +93,21 @@ func printJobQueue(url string, dumpFlag bool) {
     executors, _ := getExecutors(url, dumpFlag)
 
     b.WriteString(fmt.Sprintf(",  executor: %d/%d", executors.BusyExecutors, executors.TotalExecutors))
-    if len(executors.Executors) > 0 {
-        b = bytes.NewBufferString("\n ")
-    }
 
     for _, queue := range queueItems {
-        b.WriteString(nanairo.FgColor("#E0ffff", "✈"))
-        b.WriteString("  - ")
-        fmt.Println(queue)
-        b.WriteString(nanairo.FgColor("#999999", queue.Task.Name))
+        b.WriteString(fmt.Sprintf("\n  %s  - %-20s %s",
+                nanairo.FgColor("#E0ffff", "✈ ⇥"), queue.Task.Name,
+                nanairo.FgColor("#666666", "(in build queue)")))
     }
 
-    for _, executor := range executors.Executors {
-        b.WriteString(nanairo.FgColor("#ff6347", "✈"))
-        b.WriteString("  -  ")
-        b.WriteString(string(executor.Progress))
-        b.WriteString("/100")
-        b.WriteString(nanairo.FgColor("#999999", executor.DisplayName))
+    // TODO: only one computer resource
+    for _, executor := range executors.ComputerInfos[0].Executors {
+        if executor.Progress < 0 {
+            continue
+        }
+        b.WriteString(fmt.Sprintf("\n  %s  - %-20s %s",
+                nanairo.FgColor("#ff6347", "✈ ➟"), executor.Detail.DisplayName,
+                nanairo.FgColor("#666666", fmt.Sprintf("(%d/100)", executor.Progress))))
     }
     fmt.Println(b.String())
 }
