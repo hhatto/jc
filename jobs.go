@@ -58,6 +58,8 @@ func jobs(c *cli.Context) {
         var j = bytes.NewBufferString("  ")
         if job.Color == "blue" {
             j.WriteString(nanairo.FgColor("#0c0", "✔"))
+        } else if job.Color == "disabled" {
+            j.WriteString(nanairo.FgColor("#666", "✔"))
         } else if job.Color == "blue_anime" {
             j.WriteString(nanairo.FgColor("#0cc", "➟"))
         } else {
