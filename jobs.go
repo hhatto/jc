@@ -83,7 +83,7 @@ func jobs(c *cli.Context) {
     }
 }
 
-var Jobs = cli.Command {
+var JobsCommand = cli.Command {
     Name: "jobs",
     Usage: "print status for all jobs",
     Action: jobs,

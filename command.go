@@ -12,7 +12,7 @@ type Client struct {
 }
 
 var subCommands = []cli.Command {
-    Jobs, Status, Conf,
+    JobsCommand, JobCommand, StatusCommand, ConfCommand,
 }
 
 

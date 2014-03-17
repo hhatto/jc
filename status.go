@@ -131,7 +131,7 @@ func status(c *cli.Context) {
     printServerInfo(url)
 }
 
-var Status = cli.Command {
+var StatusCommand = cli.Command {
     Name: "status",
     Usage: "print jenkins host status",
     Action: status,

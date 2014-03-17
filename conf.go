@@ -12,19 +12,21 @@ func conf(c *cli.Context) {
         return
     }
 
-    if len(c.Args()) == 0 && c.Bool("rm") {
+    url := c.Args().First()
+    if url == "" && c.String("rm") != "" {
         fmt.Println("assign target url")
         return
     }
 
     for i, _ := range Config.HostInfo {
         if Config.HostInfo[i].Name == c.String("name") {
-            if c.Bool("rm") == true {
+            if c.String("rm") != "" {
                 // FIXME
                 Config.HostInfo = append(Config.HostInfo[:i+1], Config.HostInfo[i+1:]...)
                 fmt.Println(len(Config.HostInfo))
             } else {
                 Config.HostInfo[i] = JcConfigHostInfo{Name: c.String("name"), Hostname: c.Args().First()}
+                fmt.Println("url:", c.Args().First())
             }
             Config.Save(defaultConfigFile)
             return
@@ -35,7 +37,7 @@ func conf(c *cli.Context) {
     Config.Save(defaultConfigFile)
 }
 
-var Conf = cli.Command {
+var ConfCommand = cli.Command {
     Name: "conf",
     Usage: "config jc command setting param",
     Action: conf,
