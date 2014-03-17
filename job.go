@@ -57,8 +57,13 @@ func printJobDetail(url string, jobName string, dumpFlag bool) {
         if job.Result != "SUCCESS" {
             resultNumber = nanairo.FgColor("#c00", strconv.Itoa(job.Number))
         }
-        b.WriteString(fmt.Sprintf("  [%4s] %s %s\n", resultNumber,
-                                  jobName, time.Unix(int64(job.Timestamp) / 1000, 0)))
+        humanReadableDurationValue := fmt.Sprintf("%ds", job.Duration / 1000)
+        if job.Duration / 1000 >= 60 {
+            humanReadableDurationValue = fmt.Sprintf("%dm%ds", job.Duration / 1000 / 60, job.Duration / 1000 % 60)
+        }
+        b.WriteString(fmt.Sprintf("  [%4s] %s (%6s)\n", resultNumber,
+                                  time.Unix(int64(job.Timestamp) / 1000, 0),
+                                  humanReadableDurationValue))
     }
 
     fmt.Print(b.String())
