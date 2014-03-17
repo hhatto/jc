@@ -22,7 +22,7 @@ func setup() {
 func main() {
     app := cli.NewApp()
     app.Name = "jc"
-    app.Usage = "j + c = jenkins"
+    app.Usage = "j + c = jenkins cli"
     app.Version = VERSION
     app.Commands = subCommands
 
