@@ -14,7 +14,7 @@ import (
 type JobBuildInfo struct {
     Number int      `json:"number"`
     Result string   `json:"result"`
-    Timestamp int   `json:"timestamp"`
+    Timestamp int64 `json:"timestamp"`
     Duration int    `json:"duration"`
 }
 
