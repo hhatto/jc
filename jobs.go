@@ -68,7 +68,9 @@ func jobs(c *cli.Context) {
         j.WriteString("  ")
 
         // W
-        if job.HealthReport[0].Score >= 80 {
+        if len(job.HealthReport) == 0 {
+            j.WriteString(nanairo.FgColor("#aaa", "⁇"))
+        } else if job.HealthReport[0].Score >= 80 {
             j.WriteString(nanairo.FgColor("#f90", "☀"))
         } else if job.HealthReport[0].Score >= 20 {
             j.WriteString(nanairo.FgColor("#999", "☁"))
