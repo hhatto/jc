@@ -7,14 +7,23 @@ import (
 
 
 func conf(c *cli.Context) {
-    if c.String("dump") != "" {
-        Config.Dump(defaultConfigFile, c.String("dump"))
+    if c.Bool("dump") {
+        dumpFormat := c.Args().First()
+        if dumpFormat == "" {
+            dumpFormat = "all"
+        }
+        Config.Dump(defaultConfigFile, dumpFormat)
         return
     }
 
     url := c.Args().First()
-    if url == "" && c.String("rm") != "" {
-        fmt.Println("assign target url")
+    if url == "" && c.Bool("rm") {
+        fmt.Println("assign target name")
+        return
+    }
+
+    if !c.Bool("dump") && !c.Bool("rm") {
+        fmt.Println("print usage")
         return
     }
 
@@ -45,11 +54,9 @@ var ConfCommand = cli.Command {
         cli.StringFlag {
             "name, n", "default",
             "host key name(default is 'default')",},
-        cli.StringFlag {
-            "rm", "",
-            "remove host key name",},
-        cli.StringFlag {
-            "dump, d", "",
-            "print configuration (all, list)",},
+        cli.BoolFlag {
+            "rm", "remove host key name",},
+        cli.BoolFlag {
+            "dump, d", "print configuration (all, list). default is 'all'",},
     },
 }
