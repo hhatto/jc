@@ -48,7 +48,12 @@ func printJobDetail(url string, jobName string, dumpFlag bool) {
     b := bytes.NewBufferString("")
     jobItems, _ := getJobInfo(url, jobName, dumpFlag)
 
-    b.WriteString(fmt.Sprintf("[%s]\n", jobName))
+    if len(jobItems) > 0 {
+        b.WriteString(fmt.Sprintf("[%s]\n", jobName))
+    } else {
+        b.WriteString(fmt.Sprintf("'%s' job is not found\n", jobName))
+    }
+
     for cnt, job := range jobItems {
         if cnt >= 5 {
             break
