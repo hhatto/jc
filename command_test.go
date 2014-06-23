@@ -1,12 +1,11 @@
 package main
 
 import (
-    "testing"
+	"testing"
 )
 
-
 func TestHaveSubCommands(t *testing.T) {
-    if len(subCommands) == 0 {
-        t.Errorf("jobs is nil")
-    }
+	if len(subCommands) == 0 {
+		t.Errorf("jobs is nil")
+	}
 }
