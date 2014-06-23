@@ -22,8 +22,8 @@ func conf(c *cli.Context) {
 		return
 	}
 
-	if !c.Bool("dump") && !c.Bool("rm") {
-		fmt.Println("print usage")
+	if !c.Bool("add") && !c.Bool("dump") && !c.Bool("rm") {
+		fmt.Println("please --add or --rm option")
 		return
 	}
 
@@ -54,6 +54,7 @@ var ConfCommand = cli.Command{
 		cli.StringFlag{
 			"name, n", "default",
 			"host key name(default is 'default')"},
+		cli.BoolFlag{"add, a", "add new host key name"},
 		cli.BoolFlag{
 			"rm", "remove host key name"},
 		cli.BoolFlag{

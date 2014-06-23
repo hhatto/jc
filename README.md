@@ -14,7 +14,7 @@ $ go get github.com/hhatto/jc
 ### configuration
 ```sh
 $ jc conf https://ci.jenkins-ci.org/
-$ jc conf -n mydomain http://jenkins.mydomain.com/
+$ jc conf -n mydomain --add http://jenkins.mydomain.com/
 ```
 
 jc's config file saves in `$HOME/.config/jc`
