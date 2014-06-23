@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+
 	"github.com/codegangsta/cli"
 	"github.com/hhatto/nanairo"
-	"io"
 )
 
 type TaskInfo struct {
@@ -100,6 +101,11 @@ func printJobQueue(url string, dumpFlag bool) {
 			nanairo.FgColor("#666666", "(in build queue)")))
 	}
 
+	if len(executors.ComputerInfos) <= 0 {
+		fmt.Println("jenkins invalid state")
+		return
+	}
+
 	// TODO: only one computer resource
 	for _, executor := range executors.ComputerInfos[0].Executors {
 		if executor.Progress < 0 {
@@ -117,6 +123,7 @@ func printServerInfo(url string) {
 	res, err := client.head()
 	if err != nil {
 		fmt.Println("HEAD request error")
+		return
 	}
 
 	fmt.Println(" version:", res.Header["X-Jenkins"][0])
