@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/codegangsta/cli"
 	"net/http"
+
+	"github.com/codegangsta/cli"
 )
 
 type Client struct {
@@ -12,6 +13,7 @@ type Client struct {
 
 var subCommands = []cli.Command{
 	BuildCommand, JobsCommand, JobCommand, StatusCommand, ConfCommand, LogCommand,
+	RestartCommand,
 }
 
 func NewClient(url string) *Client {
@@ -28,6 +30,14 @@ func (c *Client) get(path string) (*http.Response, error) {
 
 func (c *Client) head() (*http.Response, error) {
 	req, err := http.NewRequest("HEAD", c.baseUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+	return c.Do(req)
+}
+
+func (c *Client) post(path string) (*http.Response, error) {
+	req, err := http.NewRequest("POST", c.baseUrl+path, nil)
 	if err != nil {
 		return nil, err
 	}
