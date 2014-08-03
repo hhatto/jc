@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	llog "log"
 	"os"
 	"path/filepath"
 )
@@ -91,5 +92,6 @@ func (conf *JcConfig) Get(key string) string {
 		}
 	}
 
+	llog.Fatalf("not found key: %s", key)
 	return ""
 }
