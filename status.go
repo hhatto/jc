@@ -144,7 +144,10 @@ var StatusCommand = cli.Command{
 	Action: status,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n", "default",
-			"host key name(default is 'default')"},
+			"name, n",
+			"default",
+			"host key name(default is 'default')",
+			"",
+		},
 	},
 }

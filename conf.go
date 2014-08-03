@@ -52,12 +52,25 @@ var ConfCommand = cli.Command{
 	Action: conf,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n", "default",
-			"host key name(default is 'default')"},
-		cli.BoolFlag{"add, a", "add new host key name"},
+			"name, n",
+			"default",
+			"host key name(default is 'default')",
+			"",
+		},
 		cli.BoolFlag{
-			"rm", "remove host key name"},
+			"add, a",
+			"add new host key name",
+			"",
+		},
 		cli.BoolFlag{
-			"dump, d", "print configuration (all, list). default is 'all'"},
+			"rm",
+			"remove host key name",
+			"",
+		},
+		cli.BoolFlag{
+			"dump, d",
+			"print configuration (all, list). default is 'all'",
+			"",
+		},
 	},
 }

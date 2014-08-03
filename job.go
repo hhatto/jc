@@ -87,13 +87,20 @@ var JobCommand = cli.Command{
 	Action: job,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n", "default",
-			"host key name(default is 'default')"},
-		cli.BoolFlag{
-			"verbose, v", "verbose mode",
+			"name, n",
+			"default",
+			"host key name(default is 'default')",
+			"",
 		},
 		cli.BoolFlag{
-			"dump, d", "dump raw json data",
+			"verbose, v",
+			"verbose mode",
+			"",
+		},
+		cli.BoolFlag{
+			"dump, d",
+			"dump raw json data",
+			"",
 		},
 	},
 }

@@ -91,10 +91,15 @@ var JobsCommand = cli.Command{
 	Action: jobs,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n", "default",
-			"host key name(default is 'default')"},
+			"name, n",
+			"default",
+			"host key name(default is 'default')",
+			"",
+		},
 		cli.BoolFlag{
 			"dump, d",
-			"dump raw json data"},
+			"dump raw json data",
+			"",
+		},
 	},
 }

@@ -48,13 +48,20 @@ var RestartCommand = cli.Command{
 	Action: restart,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n", "default",
-			"host key name(default is 'default')"},
-		cli.BoolFlag{
-			"verbose, v", "verbose mode",
+			"name, n",
+			"default",
+			"host key name(default is 'default')",
+			"",
 		},
 		cli.BoolFlag{
-			"force, f", "force restart (usually SafeRestat)",
+			"verbose, v",
+			"verbose mode",
+			"",
+		},
+		cli.BoolFlag{
+			"force, f",
+			"force restart (usually SafeRestat)",
+			"",
 		},
 	},
 }
