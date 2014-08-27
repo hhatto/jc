@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
+	"net/url"
+
 	"github.com/codegangsta/cli"
 	"github.com/hhatto/nanairo"
-	"io"
 )
 
 type healthReport struct {
@@ -20,10 +23,13 @@ type Job struct {
 	HealthReport []healthReport `json:"healthReport"`
 }
 
-func getJobs(url string, dumpFlag bool) ([]Job, error) {
-	client := NewClient(url)
+func getJobs(targetUrl string, dumpFlag bool) ([]Job, error) {
+	client := NewClient(targetUrl)
 	res, err := client.get("api/json?depth=1")
 	if err != nil {
+		return nil, err
+	}
+	if res.StatusCode != 200 {
 		return nil, err
 	}
 	defer res.Body.Close()
@@ -46,16 +52,28 @@ func getJobs(url string, dumpFlag bool) ([]Job, error) {
 	return r.Jobs, nil
 }
 
-func jobs(c *cli.Context) {
-	url := Config.Get(c.String("name"))
-	if c.Args().Present() {
-		url = fmt.Sprintf("%s/view/%s", Config.Get(c.String("name")), c.Args().First())
+func jobsCommand(c *cli.Context) {
+	targetHost := Config.Get(c.String("name"))
+	u, err := url.Parse(targetHost)
+	if err != nil {
+		log.Fatal(err)
 	}
-	jobs, _ := getJobs(url, c.Bool("dump"))
-	if c.Bool("dump") == true {
+	isViewAccess := c.Args().Present()
+
+	if isViewAccess {
+		u.Path = fmt.Sprintf("view/%s", c.Args().First())
+	}
+	jobs, _ := getJobs(u.String(), c.Bool("dump"))
+	if c.Bool("dump") == true || len(jobs) == 0 {
+		if isViewAccess {
+			fmt.Println(fmt.Sprintf("'%s' view is not exists", c.Args().First()))
+		}
 		return
 	}
-	fmt.Println(c.String("name"), "-", url)
+	fmt.Println(c.String("name"), "-", targetHost)
+	if isViewAccess {
+		fmt.Println(fmt.Sprintf("[view:%s]", c.Args().First()))
+	}
 	for _, job := range jobs {
 		// S
 		var j = bytes.NewBufferString("  ")
@@ -91,7 +109,7 @@ func jobs(c *cli.Context) {
 var JobsCommand = cli.Command{
 	Name:   "jobs",
 	Usage:  "print status for all jobs",
-	Action: jobs,
+	Action: jobsCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			"name, n",

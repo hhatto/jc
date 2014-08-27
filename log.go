@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/codegangsta/cli"
 	"io"
+
+	"github.com/codegangsta/cli"
 )
 
 type JobInfo struct {
@@ -63,7 +64,7 @@ func printLogWrapper(url string, jobName string, dumpFlag bool) {
 	}
 }
 
-func log(c *cli.Context) {
+func logCommand(c *cli.Context) {
 	url := Config.Get(c.String("name"))
 	for _, jobName := range c.Args() {
 		printLogWrapper(url, jobName, c.Bool("dump"))
@@ -73,7 +74,7 @@ func log(c *cli.Context) {
 var LogCommand = cli.Command{
 	Name:   "log",
 	Usage:  "print job's log",
-	Action: log,
+	Action: logCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			"name, n",

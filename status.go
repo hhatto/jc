@@ -130,7 +130,7 @@ func printServerInfo(url string) {
 	fmt.Println(" server:", res.Header["Server"][0])
 }
 
-func status(c *cli.Context) {
+func statusCommand(c *cli.Context) {
 	url := Config.Get(c.String("name"))
 	fmt.Println(c.String("name"), "-", url)
 	printJobQueue(url, c.Bool("dump"))
@@ -141,7 +141,7 @@ func status(c *cli.Context) {
 var StatusCommand = cli.Command{
 	Name:   "status",
 	Usage:  "print jenkins host status",
-	Action: status,
+	Action: statusCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			"name, n",

@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/codegangsta/cli"
-	"github.com/hhatto/nanairo"
 	"io"
 	"strconv"
 	"time"
+
+	"github.com/codegangsta/cli"
+	"github.com/hhatto/nanairo"
 )
 
 type JobBuildInfo struct {
@@ -74,7 +75,7 @@ func printJobDetail(url string, jobName string, dumpFlag bool) {
 	fmt.Print(b.String())
 }
 
-func job(c *cli.Context) {
+func jobCommand(c *cli.Context) {
 	url := Config.Get(c.String("name"))
 	for _, jobName := range c.Args() {
 		printJobDetail(url, jobName, c.Bool("dump"))
@@ -84,7 +85,7 @@ func job(c *cli.Context) {
 var JobCommand = cli.Command{
 	Name:   "job",
 	Usage:  "print job detail",
-	Action: job,
+	Action: jobCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			"name, n",

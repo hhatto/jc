@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+
 	"github.com/codegangsta/cli"
 )
 
@@ -28,7 +29,7 @@ func buildWrapper(url string, jobName string, dumpFlag bool) {
 	executeJob(url, jobName)
 }
 
-func build(c *cli.Context) {
+func buildCommand(c *cli.Context) {
 	url := Config.Get(c.String("name"))
 	for _, jobName := range c.Args() {
 		buildWrapper(url, jobName, c.Bool("dump"))
@@ -38,7 +39,7 @@ func build(c *cli.Context) {
 var BuildCommand = cli.Command{
 	Name:   "build",
 	Usage:  "build job",
-	Action: build,
+	Action: buildCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			"name, n",

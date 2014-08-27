@@ -6,7 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-func conf(c *cli.Context) {
+func confCommand(c *cli.Context) {
 	if c.Bool("dump") {
 		dumpFormat := c.Args().First()
 		if dumpFormat == "" {
@@ -49,7 +49,7 @@ func conf(c *cli.Context) {
 var ConfCommand = cli.Command{
 	Name:   "conf",
 	Usage:  "config jc command setting param",
-	Action: conf,
+	Action: confCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			"name, n",

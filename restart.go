@@ -37,7 +37,7 @@ func executeRestart(url string, forceFlag bool) error {
 	return nil
 }
 
-func restart(c *cli.Context) {
+func restartCommand(c *cli.Context) {
 	url := Config.Get(c.String("name"))
 	executeRestart(url, c.Bool("force"))
 }
@@ -45,7 +45,7 @@ func restart(c *cli.Context) {
 var RestartCommand = cli.Command{
 	Name:   "restart",
 	Usage:  "restart jenkins server",
-	Action: restart,
+	Action: restartCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			"name, n",
