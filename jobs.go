@@ -48,6 +48,9 @@ func getJobs(url string, dumpFlag bool) ([]Job, error) {
 
 func jobs(c *cli.Context) {
 	url := Config.Get(c.String("name"))
+	if c.Args().Present() {
+		url = fmt.Sprintf("%s/view/%s", Config.Get(c.String("name")), c.Args().First())
+	}
 	jobs, _ := getJobs(url, c.Bool("dump"))
 	if c.Bool("dump") == true {
 		return
