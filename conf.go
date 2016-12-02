@@ -22,20 +22,18 @@ func confCommand(c *cli.Context) {
 		return
 	}
 
-	if !c.Bool("add") && !c.Bool("dump") && !c.Bool("rm") {
-		fmt.Println("please --add or --rm option")
+	if !c.Bool("set") && !c.Bool("dump") && !c.Bool("rm") {
+		fmt.Println("please --set or --rm option")
 		return
 	}
 
 	for i, _ := range Config.HostInfo {
 		if Config.HostInfo[i].Name == c.String("name") {
-			if c.String("rm") != "" {
-				// FIXME
+			if c.Bool("rm") {
 				Config.HostInfo = append(Config.HostInfo[:i+1], Config.HostInfo[i+1:]...)
-				fmt.Println(len(Config.HostInfo))
-			} else {
+			} else if c.Bool("set") {
 				Config.HostInfo[i] = JcConfigHostInfo{Name: c.String("name"), Hostname: c.Args().First()}
-				fmt.Println("url:", c.Args().First())
+				fmt.Println("add url:", c.Args().First())
 			}
 			Config.Save(defaultConfigFile)
 			return
@@ -57,8 +55,8 @@ var ConfCommand = cli.Command{
 			Usage: "host key name(default is 'default')",
 		},
 		cli.BoolFlag{
-			Name:  "add, a",
-			Usage: "add new host key name",
+			Name:  "set, s",
+			Usage: "add (or overwrite) host key name",
 		},
 		cli.BoolFlag{
 			Name:  "rm",
