@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func executeJob(url string, jobName string) error {
@@ -42,20 +42,17 @@ var BuildCommand = cli.Command{
 	Action: buildCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n",
-			"default",
-			"host key name(default is 'default')",
-			"",
+			Name:  "name, n",
+			Value: "default",
+			Usage: "host key name(default is 'default')",
 		},
 		cli.BoolFlag{
-			"verbose, v",
-			"verbose mode",
-			"",
+			Name:  "verbose, v",
+			Usage: "verbose mode",
 		},
 		cli.BoolFlag{
-			"dump, d",
-			"dump raw json data",
-			"",
+			Name:  "dump, d",
+			Usage: "dump raw json data",
 		},
 	},
 }

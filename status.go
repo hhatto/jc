@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/codegangsta/cli"
 	"github.com/hhatto/nanairo"
+	"github.com/urfave/cli"
 )
 
 type TaskInfo struct {
@@ -144,10 +144,9 @@ var StatusCommand = cli.Command{
 	Action: statusCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n",
-			"default",
-			"host key name(default is 'default')",
-			"",
+			Name:  "name, n",
+			Value: "default",
+			Usage: "host key name(default is 'default')",
 		},
 	},
 }

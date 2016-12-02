@@ -8,8 +8,8 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/codegangsta/cli"
 	"github.com/hhatto/nanairo"
+	"github.com/urfave/cli"
 )
 
 type healthReport struct {
@@ -112,15 +112,13 @@ var JobsCommand = cli.Command{
 	Action: jobsCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n",
-			"default",
-			"host key name(default is 'default')",
-			"",
+			Name:  "name, n",
+			Value: "default",
+			Usage: "host key name(default is 'default')",
 		},
 		cli.BoolFlag{
-			"dump, d",
-			"dump raw json data",
-			"",
+			Name:  "dump, d",
+			Usage: "dump raw json data",
 		},
 	},
 }

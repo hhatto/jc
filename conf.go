@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func confCommand(c *cli.Context) {
@@ -52,25 +52,21 @@ var ConfCommand = cli.Command{
 	Action: confCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n",
-			"default",
-			"host key name(default is 'default')",
-			"",
+			Name:  "name, n",
+			Value: "default",
+			Usage: "host key name(default is 'default')",
 		},
 		cli.BoolFlag{
-			"add, a",
-			"add new host key name",
-			"",
+			Name:  "add, a",
+			Usage: "add new host key name",
 		},
 		cli.BoolFlag{
-			"rm",
-			"remove host key name",
-			"",
+			Name:  "rm",
+			Usage: "remove host key name",
 		},
 		cli.BoolFlag{
-			"dump, d",
-			"print configuration (all, list). default is 'all'",
-			"",
+			Name:  "dump, d",
+			Usage: "print configuration (all, list). default is 'all'",
 		},
 	},
 }

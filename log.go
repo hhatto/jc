@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 type JobInfo struct {
@@ -77,20 +77,17 @@ var LogCommand = cli.Command{
 	Action: logCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n",
-			"default",
-			"host key name(default is 'default')",
-			"",
+			Name:  "name, n",
+			Value: "default",
+			Usage: "host key name(default is 'default')",
 		},
 		cli.BoolFlag{
-			"verbose, v",
-			"verbose mode",
-			"",
+			Name:  "verbose, v",
+			Usage: "verbose mode",
 		},
 		cli.BoolFlag{
-			"dump, d",
-			"dump raw json data",
-			"",
+			Name:  "dump, d",
+			Usage: "dump raw json data",
 		},
 	},
 }

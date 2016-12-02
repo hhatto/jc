@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 )
 
 func executeRestart(url string, forceFlag bool) error {
@@ -48,20 +48,17 @@ var RestartCommand = cli.Command{
 	Action: restartCommand,
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			"name, n",
-			"default",
-			"host key name(default is 'default')",
-			"",
+			Name:  "name, n",
+			Value: "default",
+			Usage: "host key name(default is 'default')",
 		},
 		cli.BoolFlag{
-			"verbose, v",
-			"verbose mode",
-			"",
+			Name:  "verbose, v",
+			Usage: "verbose mode",
 		},
 		cli.BoolFlag{
-			"force, f",
-			"force restart (usually SafeRestat)",
-			"",
+			Name:  "force, f",
+			Usage: "force restart (usually SafeRestat)",
 		},
 	},
 }
