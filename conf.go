@@ -16,32 +16,32 @@ func confCommand(c *cli.Context) {
 		return
 	}
 
+	name := c.String("name")
 	url := c.Args().First()
-	if url == "" && c.Bool("rm") {
-		fmt.Println("assign target name")
-		return
-	}
 
 	if !c.Bool("set") && !c.Bool("dump") && !c.Bool("rm") {
 		fmt.Println("please --set or --rm option")
 		return
 	}
 
-	for i, _ := range Config.HostInfo {
-		if Config.HostInfo[i].Name == c.String("name") {
-			if c.Bool("rm") {
-				Config.HostInfo = append(Config.HostInfo[:i+1], Config.HostInfo[i+1:]...)
-			} else if c.Bool("set") {
-				Config.HostInfo[i] = JcConfigHostInfo{Name: c.String("name"), Hostname: c.Args().First()}
-				fmt.Println("add url:", c.Args().First())
-			}
+	if _, ok := Config.HostInfo[name]; ok {
+		if c.Bool("rm") {
+			delete(Config.HostInfo, name)
+			fmt.Println("delete name:", name, Config)
+		} else if c.Bool("set") {
+			Config.HostInfo[name] = JcConfigHostInfo{Name: name, Hostname: url}
+			fmt.Println("rewrite url:", url)
+		}
+		Config.Save(defaultConfigFile)
+	} else {
+		if c.Bool("set") {
+			Config.HostInfo[name] = JcConfigHostInfo{Name: name, Hostname: url}
+			fmt.Println("add url:", url)
 			Config.Save(defaultConfigFile)
-			return
+		} else {
+			fmt.Printf("name=%s is not found key\n", name)
 		}
 	}
-
-	Config.HostInfo = append(Config.HostInfo, JcConfigHostInfo{Name: c.String("name"), Hostname: c.Args().First()})
-	Config.Save(defaultConfigFile)
 }
 
 var ConfCommand = cli.Command{

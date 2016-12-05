@@ -11,9 +11,8 @@ const VERSION = "0.1"
 func setup() {
 	_, err := os.Stat(defaultConfigFile)
 	if os.IsNotExist(err) {
-		hostInfo := make([]JcConfigHostInfo, 1)
-		Config.HostInfo = hostInfo
-		Config.HostInfo[0] = JcConfigHostInfo{Name: "default", Hostname: ""}
+		Config.HostInfo = make(map[string]JcConfigHostInfo)
+		Config.HostInfo["default"] = JcConfigHostInfo{Name: "default", Hostname: ""}
 		Config.Save(defaultConfigFile)
 	}
 	Config.Load(defaultConfigFile)

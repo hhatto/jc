@@ -20,7 +20,7 @@ type JcConfigHostInfo struct {
 }
 
 type JcConfig struct {
-	HostInfo []JcConfigHostInfo `json:"hosts"`
+	HostInfo map[string]JcConfigHostInfo `json:"hosts"`
 }
 
 func NewJcConfig() *JcConfig {
@@ -86,10 +86,8 @@ func (conf *JcConfig) Save(filename string) error {
 }
 
 func (conf *JcConfig) Get(key string) string {
-	for _, info := range conf.HostInfo {
-		if info.Name == key {
-			return info.Hostname
-		}
+	if info, ok := conf.HostInfo[key]; ok {
+		return info.Hostname
 	}
 
 	llog.Fatalf("not found key: %s", key)
