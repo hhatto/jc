@@ -106,7 +106,6 @@ func printJobQueue(url string, dumpFlag bool) {
 		return
 	}
 
-	// TODO: only one computer resource
 	for _, info := range executors.ComputerInfos {
 		for _, executor := range info.Executors {
 			if executor.Progress < 0 {
