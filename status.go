@@ -107,13 +107,15 @@ func printJobQueue(url string, dumpFlag bool) {
 	}
 
 	// TODO: only one computer resource
-	for _, executor := range executors.ComputerInfos[0].Executors {
-		if executor.Progress < 0 {
-			continue
+	for _, info := range executors.ComputerInfos {
+		for _, executor := range info.Executors {
+			if executor.Progress < 0 {
+				continue
+			}
+			b.WriteString(fmt.Sprintf("\n  %s  - %-20s %s",
+				nanairo.FgColor("#ff6347", "✈ ➟"), executor.Detail.DisplayName,
+				nanairo.FgColor("#666666", fmt.Sprintf("(%d/100)", executor.Progress))))
 		}
-		b.WriteString(fmt.Sprintf("\n  %s  - %-20s %s",
-			nanairo.FgColor("#ff6347", "✈ ➟"), executor.Detail.DisplayName,
-			nanairo.FgColor("#666666", fmt.Sprintf("(%d/100)", executor.Progress))))
 	}
 	fmt.Println(b.String())
 }
