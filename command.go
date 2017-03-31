@@ -13,7 +13,7 @@ type Client struct {
 
 var subCommands = []cli.Command{
 	BuildCommand, JobsCommand, JobCommand, StatusCommand, ConfCommand, LogCommand,
-	RestartCommand,
+	RestartCommand, ViewsCommand,
 }
 
 func NewClient(url string) *Client {
