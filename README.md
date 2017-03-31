@@ -2,7 +2,7 @@
 
 jenkins cli
 
-![jc](https://dl.dropboxusercontent.com/u/26471561/img/jc.png)
+![jc](https://i.gyazo.com/eedd8d82131d080fd0eae3dd02ac00d8.png)
 
 ## Installation
 ```
@@ -50,7 +50,7 @@ default - http://jenkins.hexacosa.net/
 $ jc status -n mydomain
 ```
 
-![jc staus](https://dl.dropboxusercontent.com/u/26471561/img/jc_status.png)
+![jc staus](https://i.gyazo.com/c719fdb2bf487a025a9f4f8e2a2567f3.png)
 
 ## License
 MIT
