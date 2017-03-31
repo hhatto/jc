@@ -29,7 +29,8 @@ type Executor struct {
 	Progress int            `json:"progress"`
 }
 type ComputerInfo struct {
-	Executors []Executor `json:"executors"`
+	Executors       []Executor `json:"executors"`
+	OneOffExecutors []Executor `json:"oneOffExecutors"`
 }
 type AllExecutor struct {
 	TotalExecutors int            `json:"totalExecutors"`
@@ -109,6 +110,20 @@ func printJobQueue(url string, dumpFlag bool) {
 	for _, info := range executors.ComputerInfos {
 		for _, executor := range info.Executors {
 			if executor.Progress < 0 {
+				continue
+			}
+			if executor.Detail.DisplayName == "" {
+				continue
+			}
+			b.WriteString(fmt.Sprintf("\n  %s  - %-20s %s",
+				nanairo.FgColor("#ff6347", "✈ ➟"), executor.Detail.DisplayName,
+				nanairo.FgColor("#666666", fmt.Sprintf("(%d/100)", executor.Progress))))
+		}
+		for _, executor := range info.OneOffExecutors {
+			if executor.Progress < 0 {
+				continue
+			}
+			if executor.Detail.DisplayName == "" {
 				continue
 			}
 			b.WriteString(fmt.Sprintf("\n  %s  - %-20s %s",
