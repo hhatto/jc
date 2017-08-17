@@ -1,17 +1,27 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 
+	"github.com/jaytaylor/html2text"
 	"github.com/urfave/cli"
 )
 
 type JobInfo struct {
 	Number int    `json:"number"`
 	Url    string `json:"url"`
+	Class  string `json:"_class"`
+}
+
+func (j JobInfo) isPipelineJob() bool {
+	if j.Class == "org.jenkinsci.plugins.workflow.job.WorkflowRun" {
+		return true
+	}
+	return false
 }
 
 func getJobInfoSimple(url string, jobName string, dumpFlag bool) ([]JobInfo, error) {
@@ -40,6 +50,53 @@ func getJobInfoSimple(url string, jobName string, dumpFlag bool) ([]JobInfo, err
 	return r.JobInfo, nil
 }
 
+func printLogFromHTML(url string, jobName string, jobNumber int) error {
+	client := NewClient(url)
+	res, err := client.get(fmt.Sprintf("job/%s/%d/logText/progressiveHtml?start=0", jobName, jobNumber))
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	newbuf := new(bytes.Buffer)
+
+	textReader := bufio.NewReader(res.Body)
+	for {
+		b, isPrefix, err := textReader.ReadLine()
+		if err != nil {
+			if err != io.EOF {
+				return err
+			}
+			break
+		}
+		buf := bytes.NewBuffer(b)
+		if isPrefix {
+			for {
+				b, cont, err := textReader.ReadLine()
+				if err != nil {
+					if err != io.EOF {
+						return err
+					}
+					break
+				}
+				buf.Write(b)
+				if !cont {
+					break
+				}
+			}
+		}
+		n := buf.String() + "<br />\n"
+		newbuf.WriteString(n)
+	}
+
+	text, err := html2text.FromString(newbuf.String(), html2text.Options{PrettyTables: false})
+	if err != nil {
+		return err
+	}
+	fmt.Println(text)
+	return nil
+}
+
 func printLog(url string, jobName string, jobNumber int) error {
 	client := NewClient(url)
 	res, err := client.get(fmt.Sprintf("job/%s/%d/logText/progressiveText?start=0", jobName, jobNumber))
@@ -59,8 +116,16 @@ func printLogWrapper(url string, jobName string, dumpFlag bool) {
 	jobItems, _ := getJobInfoSimple(url, jobName, dumpFlag)
 
 	b.WriteString(fmt.Sprintf("[%s]\n", jobName))
-	if len(jobItems) != 0 {
-		printLog(url, jobName, jobItems[0].Number)
+	if len(jobItems) == 0 {
+		fmt.Println("not found job")
+		return
+	}
+
+	job := jobItems[0]
+	if job.isPipelineJob() {
+		printLogFromHTML(url, jobName, job.Number)
+	} else {
+		printLog(url, jobName, job.Number)
 	}
 }
 
