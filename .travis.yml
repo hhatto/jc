@@ -1,11 +1,13 @@
 language: go
 go:
     - 1.7
+    - 1.8
     - tip
 
 install:
     - go get -v github.com/urfave/cli
     - go get -v github.com/hhatto/nanairo
+    - go get -v github.com/jaytaylor/html2text
 
 script:
     - go test -v ./
