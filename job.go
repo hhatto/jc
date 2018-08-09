@@ -56,20 +56,29 @@ func printJobDetail(url string, jobName string, dumpFlag bool) {
 	}
 
 	for cnt, job := range jobItems {
+		var running bool = false
 		if cnt >= 5 {
 			break
 		}
 		resultNumber := nanairo.FgColor("#0c0", strconv.Itoa(job.Number))
-		if job.Result != "SUCCESS" {
+		if job.Result == "" {
+			running = true
+			resultNumber = nanairo.FgColor("#cc0", strconv.Itoa(job.Number))
+		} else if job.Result != "SUCCESS" {
 			resultNumber = nanairo.FgColor("#c00", strconv.Itoa(job.Number))
 		}
 		humanReadableDurationValue := fmt.Sprintf("%ds", job.Duration/1000)
 		if job.Duration/1000 >= 60 {
 			humanReadableDurationValue = fmt.Sprintf("%dm%ds", job.Duration/1000/60, job.Duration/1000%60)
 		}
-		b.WriteString(fmt.Sprintf("  [%4s] %s (%6s)\n", resultNumber,
+		runningStr := ""
+		if running {
+			runningStr = " 🏗️"
+		}
+		b.WriteString(fmt.Sprintf("  [%4s] %s (%6s)%s\n", resultNumber,
 			time.Unix(int64(job.Timestamp)/1000, 0),
-			humanReadableDurationValue))
+			humanReadableDurationValue,
+			runningStr))
 	}
 
 	fmt.Print(b.String())
